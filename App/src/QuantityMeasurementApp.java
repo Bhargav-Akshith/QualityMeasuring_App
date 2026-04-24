@@ -71,9 +71,7 @@ public class QuantityMeasurementApp {
             if (other == null) {
                 throw new IllegalArgumentException();
             }
-            double sumInFeet = this.toFeet() + other.toFeet();
-            double resultValue = this.unit.fromBase(sumInFeet);
-            return new Quantity(resultValue, this.unit);
+            return add(this, other, this.unit);
         }
 
         public static Quantity add(Quantity q1, Quantity q2, LengthUnit targetUnit) {
@@ -108,13 +106,13 @@ public class QuantityMeasurementApp {
     }
 
     public static void main(String[] args) {
-        System.out.println(new Quantity(1.0, LengthUnit.FEET).add(new Quantity(2.0, LengthUnit.FEET)));
-        System.out.println(new Quantity(1.0, LengthUnit.FEET).add(new Quantity(12.0, LengthUnit.INCH)));
-        System.out.println(new Quantity(12.0, LengthUnit.INCH).add(new Quantity(1.0, LengthUnit.FEET)));
-        System.out.println(new Quantity(1.0, LengthUnit.YARDS).add(new Quantity(3.0, LengthUnit.FEET)));
-        System.out.println(new Quantity(36.0, LengthUnit.INCH).add(new Quantity(1.0, LengthUnit.YARDS)));
-        System.out.println(new Quantity(2.54, LengthUnit.CENTIMETERS).add(new Quantity(1.0, LengthUnit.INCH)));
-        System.out.println(new Quantity(5.0, LengthUnit.FEET).add(new Quantity(0.0, LengthUnit.INCH)));
-        System.out.println(new Quantity(5.0, LengthUnit.FEET).add(new Quantity(-2.0, LengthUnit.FEET)));
+        System.out.println(Quantity.add(new Quantity(1.0, LengthUnit.FEET), new Quantity(12.0, LengthUnit.INCH), LengthUnit.FEET));
+        System.out.println(Quantity.add(new Quantity(1.0, LengthUnit.FEET), new Quantity(12.0, LengthUnit.INCH), LengthUnit.INCH));
+        System.out.println(Quantity.add(new Quantity(1.0, LengthUnit.FEET), new Quantity(12.0, LengthUnit.INCH), LengthUnit.YARDS));
+        System.out.println(Quantity.add(new Quantity(1.0, LengthUnit.YARDS), new Quantity(3.0, LengthUnit.FEET), LengthUnit.YARDS));
+        System.out.println(Quantity.add(new Quantity(36.0, LengthUnit.INCH), new Quantity(1.0, LengthUnit.YARDS), LengthUnit.FEET));
+        System.out.println(Quantity.add(new Quantity(2.54, LengthUnit.CENTIMETERS), new Quantity(1.0, LengthUnit.INCH), LengthUnit.CENTIMETERS));
+        System.out.println(Quantity.add(new Quantity(5.0, LengthUnit.FEET), new Quantity(0.0, LengthUnit.INCH), LengthUnit.YARDS));
+        System.out.println(Quantity.add(new Quantity(5.0, LengthUnit.FEET), new Quantity(-2.0, LengthUnit.FEET), LengthUnit.INCH));
     }
 }
