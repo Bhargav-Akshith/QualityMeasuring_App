@@ -19,29 +19,60 @@
  */
 
 // Main method to demonstrate Feet equality check
-
 public class QuantityMeasurementApp {
 
-    public static class Feet {
-        private final double value;
+    enum Unit {
+        FEET(12.0),
+        INCH(1.0);
 
-        public Feet(double value) {
+        private final double toInch;
+
+        Unit(double toInch) {
+            this.toInch = toInch;
+        }
+
+        public double toBase(double value) {
+            return value * toInch;
+        }
+    }
+
+    public static class Quantity {
+        private final double value;
+        private final Unit unit;
+
+        public Quantity(double value, Unit unit) {
             this.value = value;
+            this.unit = unit;
+        }
+
+        private double toInches() {
+            return unit.toBase(value);
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
-            Feet feet = (Feet) obj;
-            return Double.compare(feet.value, value) == 0;
+            Quantity that = (Quantity) obj;
+            return Double.compare(this.toInches(), that.toInches()) == 0;
         }
     }
 
-    public static void main(String[] args) {
-        Feet f1 = new Feet(1.0);
-        Feet f2 = new Feet(1.0);
+    public static boolean areFeetEqual(double v1, double v2) {
+        return new Quantity(v1, Unit.FEET).equals(new Quantity(v2, Unit.FEET));
+    }
 
-        System.out.println("Equal (" + f1.equals(f2) + ")");
+    public static boolean areInchesEqual(double v1, double v2) {
+        return new Quantity(v1, Unit.INCH).equals(new Quantity(v2, Unit.INCH));
+    }
+
+    public static boolean areFeetAndInchesEqual(double feet, double inches) {
+        return new Quantity(feet, Unit.FEET).equals(new Quantity(inches, Unit.INCH));
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Feet Equal (" + areFeetEqual(1.0, 1.0) + ")");
+        System.out.println("Inches Equal (" + areInchesEqual(1.0, 1.0) + ")");
+        System.out.println("Feet-Inches Equal (" + areFeetAndInchesEqual(1.0, 12.0) + ")");
     }
 }
