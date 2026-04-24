@@ -21,31 +21,34 @@
 // Main method to demonstrate Feet equality check
 public class QuantityMeasurementApp {
 
-    enum Unit {
-        FEET(12.0),
-        INCH(1.0);
+    enum LengthUnit {
+        FEET(1.0),
+        INCH(1.0 / 12.0);
 
-        private final double toInch;
+        private final double toFeet;
 
-        Unit(double toInch) {
-            this.toInch = toInch;
+        LengthUnit(double toFeet) {
+            this.toFeet = toFeet;
         }
 
         public double toBase(double value) {
-            return value * toInch;
+            return value * toFeet;
         }
     }
 
     public static class Quantity {
         private final double value;
-        private final Unit unit;
+        private final LengthUnit unit;
 
-        public Quantity(double value, Unit unit) {
+        public Quantity(double value, LengthUnit unit) {
+            if (unit == null) {
+                throw new IllegalArgumentException("Unit cannot be null");
+            }
             this.value = value;
             this.unit = unit;
         }
 
-        private double toInches() {
+        private double toFeet() {
             return unit.toBase(value);
         }
 
@@ -54,25 +57,17 @@ public class QuantityMeasurementApp {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
             Quantity that = (Quantity) obj;
-            return Double.compare(this.toInches(), that.toInches()) == 0;
+            return Double.compare(this.toFeet(), that.toFeet()) == 0;
         }
     }
 
-    public static boolean areFeetEqual(double v1, double v2) {
-        return new Quantity(v1, Unit.FEET).equals(new Quantity(v2, Unit.FEET));
-    }
-
-    public static boolean areInchesEqual(double v1, double v2) {
-        return new Quantity(v1, Unit.INCH).equals(new Quantity(v2, Unit.INCH));
-    }
-
-    public static boolean areFeetAndInchesEqual(double feet, double inches) {
-        return new Quantity(feet, Unit.FEET).equals(new Quantity(inches, Unit.INCH));
-    }
-
     public static void main(String[] args) {
-        System.out.println("Feet Equal (" + areFeetEqual(1.0, 1.0) + ")");
-        System.out.println("Inches Equal (" + areInchesEqual(1.0, 1.0) + ")");
-        System.out.println("Feet-Inches Equal (" + areFeetAndInchesEqual(1.0, 12.0) + ")");
+        Quantity q1 = new Quantity(1.0, LengthUnit.FEET);
+        Quantity q2 = new Quantity(12.0, LengthUnit.INCH);
+        Quantity q3 = new Quantity(1.0, LengthUnit.INCH);
+
+        System.out.println("Feet-Inch Equal (" + q1.equals(q2) + ")");
+        System.out.println("Inch-Inch Equal (" + q3.equals(new Quantity(1.0, LengthUnit.INCH)) + ")");
+        System.out.println("Feet-Feet Equal (" + q1.equals(new Quantity(1.0, LengthUnit.FEET)) + ")");
     }
 }
