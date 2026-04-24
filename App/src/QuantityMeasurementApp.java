@@ -23,7 +23,9 @@ public class QuantityMeasurementApp {
 
     enum LengthUnit {
         FEET(1.0),
-        INCH(1.0 / 12.0);
+        INCH(1.0 / 12.0),
+        YARDS(3.0),
+        CENTIMETERS(0.393701 / 12.0);
 
         private final double toFeet;
 
@@ -42,7 +44,7 @@ public class QuantityMeasurementApp {
 
         public Quantity(double value, LengthUnit unit) {
             if (unit == null) {
-                throw new IllegalArgumentException("Unit cannot be null");
+                throw new IllegalArgumentException();
             }
             this.value = value;
             this.unit = unit;
@@ -62,12 +64,10 @@ public class QuantityMeasurementApp {
     }
 
     public static void main(String[] args) {
-        Quantity q1 = new Quantity(1.0, LengthUnit.FEET);
-        Quantity q2 = new Quantity(12.0, LengthUnit.INCH);
-        Quantity q3 = new Quantity(1.0, LengthUnit.INCH);
-
-        System.out.println("Feet-Inch Equal (" + q1.equals(q2) + ")");
-        System.out.println("Inch-Inch Equal (" + q3.equals(new Quantity(1.0, LengthUnit.INCH)) + ")");
-        System.out.println("Feet-Feet Equal (" + q1.equals(new Quantity(1.0, LengthUnit.FEET)) + ")");
+        System.out.println(new Quantity(1.0, LengthUnit.YARDS).equals(new Quantity(3.0, LengthUnit.FEET)));
+        System.out.println(new Quantity(1.0, LengthUnit.YARDS).equals(new Quantity(36.0, LengthUnit.INCH)));
+        System.out.println(new Quantity(2.0, LengthUnit.YARDS).equals(new Quantity(2.0, LengthUnit.YARDS)));
+        System.out.println(new Quantity(2.0, LengthUnit.CENTIMETERS).equals(new Quantity(2.0, LengthUnit.CENTIMETERS)));
+        System.out.println(new Quantity(1.0, LengthUnit.CENTIMETERS).equals(new Quantity(0.393701, LengthUnit.INCH)));
     }
 }
